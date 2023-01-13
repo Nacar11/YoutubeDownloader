@@ -1,10 +1,11 @@
 # pip install customtkinter
 from pytube import YouTube
-from PIL import Image, ImageTk
+from PIL import ImageTk
 from urllib.request import urlopen
 import customtkinter
-import tkinter
-import tkinter.messagebox
+import tkinter.filedialog as fd
+import shutil
+
 # import ytDownloader
 customtkinter.set_appearance_mode("light")
 customtkinter.set_default_color_theme("blue")
@@ -14,7 +15,7 @@ class App(customtkinter.CTk):
         super().__init__()
         self.labelPreview1 = customtkinter.CTkLabel(self)
         self.labelPreview2 = customtkinter.CTkLabel(self)
-        self.geometry("850x550")
+        self.geometry("850x700")
         self.title("Youtube Downloader")
 
          # configure grid layout (4x4)
@@ -60,16 +61,18 @@ class App(customtkinter.CTk):
         # self.previewView.pack(pady=10, padx=12)
  
 
-    def download():
-        print("test")
-    #  ytLink = entry1.get()
-    #  # label.configure(text=ytLink)
-    #  yt = YouTube(ytLink)
+    def download(self):
+     if(self.entry.get()):
+      
+      directory = fd.askdirectory()
+      print(type(directory))
+      print(directory)
 
-    #  yd = yt.streams.get_highest_resolution()
 
-    #  # ADD FOLDER HERE
-    #  yd.download('./YTfolder')
+      ytLink = self.entry.get()
+      yt = YouTube(ytLink)
+      vid = yt.streams.get_highest_resolution().download('./YTfolder')
+      shutil.move(vid, directory)
     
 
     def preview(self): 
@@ -80,11 +83,7 @@ class App(customtkinter.CTk):
 
      ytLink = self.entry.get()
      # label.configure(text=ytLink)
-     
      yt = YouTube(ytLink)
-     self.labelPreview1 = customtkinter.CTkLabel(self, text=yt.title, font=customtkinter.CTkFont(size=12, weight="bold"), text_color="black",  width=120, height=65)
-     self.labelPreview1.grid(row=0, column=1, padx=(10, 0), pady=(10, 0))
-
      image_url = yt.thumbnail_url
      u = urlopen(image_url)
      raw_data = u.read()
@@ -93,17 +92,23 @@ class App(customtkinter.CTk):
      image_final = ImageTk.PhotoImage(data=raw_data)
      
      
-     self.labelPreview2 = customtkinter.CTkLabel(self,image=image_final)
-     self.labelPreview2.grid(row=1, column=1, padx=(10, 0), pady=(10, 0))
+     self.labelPreview2 = customtkinter.CTkLabel(self,image=image_final, text="")
+     self.labelPreview2.grid(row=0, column=1, padx=(10, 0), pady=(10, 0))
 
-     
+     mytext = "{}  \n\nAuthor: {}  \n\nViews: {}" .format(yt.title, yt.author, yt.views)
+     self.labelPreview1 = customtkinter.CTkLabel(self, text=mytext, font=customtkinter.CTkFont(size=12, weight="bold"),  width=120, height=65)
+     self.labelPreview1.grid(row=1, column=1, padx=(10, 0), pady=(0, 0))
+
+
+
 
     def clear(self):
         self.labelPreview1.destroy()
         self.labelPreview2.destroy()
-        self.labelPreview1 = customtkinter.CTkLabel(self, text="", font=customtkinter.CTkFont(size=12, weight="bold"), text_color="black",  width=120, height=65)
-        self.labelPreview1.grid(row=0, column=1, padx=(10, 0), pady=(10, 0))
-        self.labelPreview2 = customtkinter.CTkLabel(self)
+        self.labelPreview2 = customtkinter.CTkLabel(self, text="")
+        self.labelPreview2.grid(row=0, column=1, padx=(10, 0), pady=(10, 0))
+        self.labelPreview1 = customtkinter.CTkLabel(self, text="", font=customtkinter.CTkFont(size=12, weight="bold"),  width=120, height=65)
+        self.labelPreview1.grid(row=1, column=1, padx=(10, 0), pady=(10, 0))
 
     def change_display(self, new_display: str):
          customtkinter.set_appearance_mode(new_display)
