@@ -8,7 +8,7 @@ import shutil
 
 # import ytDownloader
 customtkinter.set_appearance_mode("light")
-customtkinter.set_default_color_theme("blue")
+# customtkinter.set_default_color_theme("blue")
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -17,6 +17,8 @@ class App(customtkinter.CTk):
         self.labelPreview2 = customtkinter.CTkLabel(self)
         self.geometry("850x700")
         self.title("Youtube Downloader")
+        
+        # print('c:\Users\nacar\reposPython\YoutubeDownloader\favicon.ico')
 
          # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
